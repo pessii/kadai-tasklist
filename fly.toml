@@ -1,0 +1,45 @@
+# fly.toml file generated for quiet-water-2011 on 2023-04-06T14:02:44Z
+
+app = "quiet-water-2011"
+kill_signal = "SIGINT"
+kill_timeout = 5
+mounts = []
+primary_region = "nrt"
+processes = []
+
+[build]
+  [build.args]
+    NODE_VERSION = "14"
+    PHP_VERSION = "8.1"
+
+[env]
+  APP_ENV = "production"
+  LOG_CHANNEL = "stderr"
+  LOG_LEVEL = "info"
+  LOG_STDERR_FORMATTER = "Monolog\\Formatter\\JsonFormatter"
+  APP_URL = "https://quiet-water-2011.fly.dev"
+  APP_NAME = "Laravel"
+  APP_DEBUG = false
+  DB_CONNECTION = "pgsql"
+  DB_HOST = "db.zpndjjncgruqecfjuhxy.supabase.co"
+  DB_PORT = 5432
+  DB_DATABASE = "postgres"
+  DB_USERNAME = "postgres"
+
+[[services]]
+  internal_port = 8080
+  processes = ["app"]
+  protocol = "tcp"
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+    type = "connections"
+
+  [[services.ports]]
+    force_https = true
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
