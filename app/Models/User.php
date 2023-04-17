@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable //implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -33,4 +33,20 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
+    /**
+     * このユーザが所有する投稿。（ Micropostモデルとの関係を定義）
+     */
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+    
+    /**
+     * このユーザに関係するモデルの件数をロードする。
+     */
+    public function loadRelationshipCounts()
+    {
+        $this->loadCount('tasks');
+    }
 }

@@ -10,7 +10,7 @@
         <table class="table table-zebra w-full my-4">
             <thead>
                 <tr>
-                    <th>id</th>
+                    <th></th>
                     <th>ステータス</th>
                     <th>タスク名</th>
                 </tr>
@@ -18,14 +18,17 @@
             <tbody>
                 @foreach ($tasks as $task)
                 <tr>
-                    <td><a class="link link-hover text-info" href="{{ route('tasks.show', $task->id) }}">{{ $task->id }}</a></td>
+                    <td><a class="link link-hover text-info" href="{{ route('users.show', $task->id) }}">詳細</a></td>
                     <td>{{ $task->status }}</td>
                     <td>{{ $task->content }}</td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
+        {{-- ページネーションのリンク --}}
+        {{ $tasks->links() }}
     @endif
+    
     
     {{-- タスク作成ページへのリンク --}}
     <a class="btn btn-primary" href="{{ route('tasks.create') }}">新規タスクの追加</a>
