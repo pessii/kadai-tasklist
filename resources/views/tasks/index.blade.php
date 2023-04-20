@@ -18,7 +18,7 @@
             <tbody>
                 @foreach ($tasks as $task)
                 <tr>
-                    <td><a class="link link-hover text-info" href="{{ route('users.show', $task->id) }}">詳細</a></td>
+                    <td><a class="link link-hover text-info" href="{{ route('tasks.show', $task->id) }}">詳細</a></td>
                     <td>{{ $task->status }}</td>
                     <td>{{ $task->content }}</td>
                 </tr>

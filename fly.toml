@@ -1,6 +1,6 @@
-# fly.toml file generated for quiet-water-2011 on 2023-04-06T14:02:44Z
+# fly.toml file generated for patient-smoke-8592 on 2023-04-19T13:48:39Z
 
-app = "quiet-water-2011"
+app = "patient-smoke-8592"
 kill_signal = "SIGINT"
 kill_timeout = 5
 mounts = []
@@ -17,14 +17,6 @@ processes = []
   LOG_CHANNEL = "stderr"
   LOG_LEVEL = "info"
   LOG_STDERR_FORMATTER = "Monolog\\Formatter\\JsonFormatter"
-  APP_URL = "https://quiet-water-2011.fly.dev"
-  APP_NAME = "Laravel"
-  APP_DEBUG = false
-  DB_CONNECTION = "pgsql"
-  DB_HOST = "db.zpndjjncgruqecfjuhxy.supabase.co"
-  DB_PORT = 5432
-  DB_DATABASE = "postgres"
-  DB_USERNAME = "postgres"
 
 [[services]]
   internal_port = 8080

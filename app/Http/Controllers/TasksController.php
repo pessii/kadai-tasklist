@@ -22,8 +22,8 @@ class TasksController extends Controller
                 'user' => $user,
                 'tasks' => $tasks,
             ];
-            // users.indexビューでそれらを表示
-            return view('users.index', $data);
+            // tasks.indexビューでそれらを表示
+            return view('tasks.index', $data);
         }else{
             return view('dashboard');
         }
@@ -39,6 +39,22 @@ class TasksController extends Controller
             'task' => $task,
         ]);
     }
+    
+    // getでtasks/（任意のid）にアクセスされた場合の「取得表示処理」
+    public function show($id)
+    {
+        $user = Auth::user();
+        $task = Task::findOrFail($id);
+
+        if($user->id == $task->user->id){
+            // タスク詳細ビューでそれを表示
+            return view('tasks.show', [
+                'task' => $task,
+            ]);
+        }else{
+            return redirect('dashboard');
+        }
+    }
 
     // postでtasks/にアクセスされた場合の「新規登録処理」
     public function store(Request $request)
@@ -50,13 +66,11 @@ class TasksController extends Controller
             'content' => 'required|max:255',
         ]);
         
-        // タスクを作成
-        $task = new Task;
-        $task -> status = $request->status;
-        $task -> content = $request->content;
-        $task -> user_id = $user->id;
-        // dd($task->user_id);
-        $task -> save();
+        $request->user()->tasks()->create([
+            'status' => $request->status,
+            'content' => $request->content,
+            'user_id' => $user->id,
+        ]);
 
         // トップページへリダイレクトさせる
         return redirect('/dashboard');
@@ -65,13 +79,17 @@ class TasksController extends Controller
     // getでtasks/（任意のid）/editにアクセスされた場合の「更新画面表示処理」
     public function edit($id)
     {
-        // idの値でタスクを検索して取得
+        $user = Auth::user();
         $task = Task::findOrFail($id);
 
-        // タスク編集ビューでそれを表示
-        return view('tasks.edit', [
-            'task' => $task,
-        ]);
+        if($user->id == $task->user->id){
+            // タスク編集ビューでそれを表示
+            return view('tasks.edit', [
+                'task' => $task,
+            ]);
+        }else{
+            return redirect('dashboard');
+        }
     }
 
     // putまたはpatchでtasks/（任意のid）にアクセスされた場合の「更新処理」
@@ -97,19 +115,23 @@ class TasksController extends Controller
     // deleteでtasks/（任意のid）にアクセスされた場合の「削除処理」
     public function destroy($id)
     {
-        // idの値でタスクを検索して取得
-        $task = Task::findOrFail($id);
         
-        if (\Auth::id() === $task->user_id) {
+            
+            
+        $user = Auth::user();
+        $task = Task::findOrFail($id);
+
+        if($user->id == $task->user->id){
+            if (\Auth::id() === $task->user_id) {
             $task->delete();
             return redirect('/dashboard');
+            }
+    
+            // トップページへリダイレクトさせる
+            return redirect('/dashboard')
+                ->with('Delete Failed');
+        }else{
+            return redirect('dashboard');
         }
-        
-        // // タスクを削除
-        // $task->delete();
-
-        // トップページへリダイレクトさせる
-        return redirect('/dashboard')
-            ->with('Delete Failed');;
     }
 }

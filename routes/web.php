@@ -3,7 +3,6 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\UsersController;
 use App\Http\Controllers\TasksController;
 
 /*
@@ -24,6 +23,5 @@ Route::get('/dashboard', [TasksController::class, 'index'])->middleware(['auth']
 require __DIR__.'/auth.php';
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::resource('users', UsersController::class, ['only' => ['index', 'show']]);
-    Route::resource('tasks', TasksController::class, ['only' => ['create', 'store', 'edit', 'destroy', 'update']]);
+    Route::resource('tasks', TasksController::class);
 });
